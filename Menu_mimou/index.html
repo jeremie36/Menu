@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Menu de la semaine – version ludique</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <main class="layout">
+    <!-- Colonne des cartes (pile) -->
+    <aside class="deck">
+      <input id="search" class="search" placeholder="Rechercher une recette…" />
+
+      <div class="deck-head">
+        <div class="deck-tabs">
+          <button class="tab active" data-cat="matin">🌅 Matin</button>
+          <button class="tab" data-cat="collation-am">🥤 Collations</button>
+          <button class="tab" data-cat="midi">🍽️ Repas</button>
+          <button class="tab" data-cat="collation-pm">🍪 Dessert</button>
+        
+        </div>
+        <small>Glisse une carte vers la semaine →</small>
+      </div>
+
+      <div id="deck-list" class="card-stack" aria-live="polite"></div>
+    </aside>
+
+    <!-- Tableau de la semaine (construit en JS) -->
+    <section class="planner">
+      <div class="planner-head">
+        <h2>🗓️ Semaine</h2>
+        <div class="planner-actions">
+          <button id="open-summary" class="btn strong">🧺 Liste d’ingrédients</button>
+          <button id="clear-week" class="btn ghost">Vider la semaine</button>
+        </div>
+      </div>
+      <div id="grid" class="grid"></div>
+    </section>
+  </main>
+
+  <!-- Modale détails recette -->
+  <div id="modal" class="modal" aria-hidden="true" role="dialog" aria-labelledby="modal-title">
+    <div class="modal-content">
+      <button id="modal-close" class="close" aria-label="Fermer">✕</button>
+      <h3 id="modal-title"></h3>
+      <div id="modal-body"></div>
+      <div class="modal-actions">
+        <button id="modal-add" class="btn">Ajouter pour aujourd’hui</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modale liste d’ingrédients agrégée -->
+  <div id="summary" class="modal" aria-hidden="true" role="dialog" aria-labelledby="summary-title">
+    <div class="modal-content">
+      <button id="summary-close" class="close" aria-label="Fermer">✕</button>
+      <h3 id="summary-title">🧺 Liste d’ingrédients</h3>
+      <div id="summary-body"></div>
+      <div class="modal-actions">
+        <button id="copy-summary" class="btn">Copier</button>
+        <button id="print-summary" class="btn ghost">Imprimer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Script à la fin du body -->
+  <script src="script.js"></script>
+</body>
+</html>

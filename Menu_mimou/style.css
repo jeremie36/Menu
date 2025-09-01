@@ -1,0 +1,112 @@
+:root{
+  --bg:#0b1020; --panel:#0f172a; --card:#111b36; --muted:#9aa7c7; --line:#1e2a4a;
+  --ok:#10b981; --accent:#60a5fa; --accent-2:#f59e0b; --accent-3:#ef4444; --white:#e8efff;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,sans-serif;
+  background:linear-gradient(180deg,#0b1020 0%, #0e1630 100%);
+  color:var(--white);
+}
+
+/* layout */
+.layout{display:grid;grid-template-columns:380px 1fr;gap:18px;padding:18px}
+@media (max-width:980px){.layout{grid-template-columns:1fr}}
+
+/* deck */
+.deck{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px}
+.search{
+  background:#0d1a36;border:1px solid var(--line);color:var(--white);
+  padding:15px 12px;border-radius:15px;width:min(360px,46vw);margin-bottom:12px;
+}
+.deck-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:12px}
+.deck-tabs{display:flex;flex-wrap:wrap;gap:8px}
+.tab{
+  padding:8px 12px;border:1px solid var(--line);background:#0b142c;color:var(--white);
+  border-radius:999px;cursor:pointer;font-weight:800;font-size:13px;
+}
+.tab.active{border-color:var(--accent);background:var(--accent);color:#071019}
+.tab:focus{outline:2px solid var(--accent);outline-offset:2px}
+
+.card-stack{position:relative;min-height:420px;padding-top:22px}
+.card{
+  position:relative;width:100%;background:var(--card);border:1px solid var(--line);
+  border-radius:14px;padding:12px 14px;box-shadow:0 8px 20px rgba(0,0,0,.25);
+  transition:transform .18s ease,filter .18s ease,box-shadow .18s ease;
+  cursor:grab;user-select:none;
+}
+.card + .card{margin-top:-46px} /* empilement (titres visibles) */
+.card:hover{transform:translateX(10px) rotate(0.2deg);filter:brightness(1.05);z-index:999}
+.card .title{display:flex;gap:8px;font-weight:800;letter-spacing:.2px}
+.card .meta{color:var(--muted);font-size:12px;margin-top:4px}
+.badge{font-size:11px;padding:3px 8px;border-radius:999px;border:1px solid var(--line);opacity:.9}
+
+/* couleurs fun pour cartes pile */
+.card[data-color="blue"]{ background:linear-gradient(180deg,#132a53,#132244) }
+.card[data-color="teal"]{ background:linear-gradient(180deg,#0c3b3b,#0b2f2f) }
+.card[data-color="amber"]{ background:linear-gradient(180deg,#3d2b0b,#2d220e) }
+.card[data-color="rose"]{ background:linear-gradient(180deg,#3a1630,#2b0f23) }
+.card[data-color="violet"]{ background:linear-gradient(180deg,#1e1b4b,#17163b) }
+.card[data-color="green"]{ background:linear-gradient(180deg,#0f3620,#0b2b19) }
+
+/* boutons génériques */
+.btn{
+  appearance:none;border:1px solid var(--accent);background:var(--accent);color:#071019;
+  font-weight:700;padding:10px 12px;border-radius:10px;cursor:pointer
+}
+.btn.ghost{background:transparent;color:var(--accent);border-color:var(--line)}
+.btn.strong{border-color:var(--ok);background:var(--ok)}
+
+/* planner */
+.planner{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px}
+.planner-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.grid{
+  display:grid;grid-template-columns:140px repeat(5,1fr);
+  border-top:1px solid var(--line);border-left:1px solid var(--line);
+  border-radius:12px;overflow:hidden
+}
+.grid-head,.cell{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px}
+.grid-head{background:#0b142c;font-weight:800}
+.row-head{background:#0b142c;font-weight:700}
+
+/* cellules */
+.cell{min-height:120px;position:relative}
+.cell .placeholder{color:var(--muted);font-size:12px}
+.drop-hover{outline:2px dashed var(--accent);outline-offset:-6px}
+
+/* conteneur de cartes dans une cellule */
+.cell-list{display:flex;flex-direction:column;gap:8px}
+
+/* mini cartes dans la semaine */
+.day-card{
+  background:#0e1c3c;border:1px solid var(--line);border-left:8px solid var(--accent);
+  border-radius:10px;padding:8px;display:flex;flex-direction:column;gap:6px;
+  font-size:14px;cursor:grab
+}
+.day-card .top{display:flex;justify-content:space-between;gap:8px}
+.day-card .name{font-weight:700}
+.day-card .controls{display:flex;gap:6px}
+.icon-btn{
+  background:transparent;border:1px solid var(--line);color:var(--muted);
+  border-radius:8px;padding:4px 8px;cursor:pointer;font-size:12px
+}
+.icon-btn:hover{color:var(--white);border-color:var(--accent)}
+.day-card .body{display:none;font-size:13px;color:#c6d3ff}
+.day-card.expanded .body{display:block}
+
+/* couleurs fun pour day-cards */
+.day-card[data-color="blue"]{border-left-color:#3b82f6}
+.day-card[data-color="teal"]{border-left-color:#14b8a6}
+.day-card[data-color="amber"]{border-left-color:#f59e0b}
+.day-card[data-color="rose"]{border-left-color:#f43f5e}
+.day-card[data-color="violet"]{border-left-color:#8b5cf6}
+.day-card[data-color="green"]{border-left-color:#10b981}
+
+/* modal */
+.modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(4,8,18,.6);backdrop-filter: blur(4px)}
+.modal.open{display:flex}
+.modal-content{width:min(820px,96vw);background:#0f172a;color:var(--white);border:1px solid var(--line);border-radius:14px;padding:16px;position:relative}
+.close{position:absolute;right:10px;top:10px;background:#0a1228;border:1px solid var(--line);color:#b9c6ea;border-radius:999px;width:34px;height:34px;cursor:pointer}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:10px}
