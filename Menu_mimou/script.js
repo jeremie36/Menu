@@ -555,6 +555,9 @@ RECIPES.push(
 /* =========================
    Constantes & état
    ========================= */
+
+   const LS_DECK_W = 'planner-deck-w';
+
 const DAYS = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
 const MEALS = [
   { key:'matin',         label:'Matin' },
@@ -867,6 +870,55 @@ document.addEventListener('DOMContentLoaded', () => {
   summary?.addEventListener('click', e=>{ if(e.target===summary) closeSummary(); });
   printSummaryBtn?.addEventListener('click', ()=>window.print());
   copySummaryBtn?.addEventListener('click', copySummary);
+
+
+    const layoutEl = document.querySelector('.layout');
+  const resizer = document.getElementById('deck-resizer');
+
+  // largeur mémorisée
+  const savedDeckW = Number(localStorage.getItem(LS_DECK_W));
+  if (savedDeckW) document.documentElement.style.setProperty('--deck-w', savedDeckW + 'px');
+
+  // drag pour redimensionner
+  let dragging = false;
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
+
+  const onPointerMove = (e) => {
+    if (!dragging) return;
+    const rect = layoutEl.getBoundingClientRect();
+    // largeur = position du curseur relative au bord gauche du layout
+    let w = e.clientX - rect.left;
+    // bornes cohérentes avec le CSS
+    const minW = 280;
+    const maxW = Math.min(window.innerWidth * 0.7, 920);
+    w = clamp(w, minW, maxW);
+    document.documentElement.style.setProperty('--deck-w', w + 'px');
+  };
+
+  const stopDrag = () => {
+    if (!dragging) return;
+    dragging = false;
+    // on mémorise
+    const current = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--deck-w'));
+    localStorage.setItem(LS_DECK_W, String(Math.round(current)));
+    window.removeEventListener('pointermove', onPointerMove);
+    window.removeEventListener('pointerup', stopDrag);
+  };
+
+  resizer?.addEventListener('pointerdown', (e) => {
+    dragging = true;
+    e.preventDefault();
+    window.addEventListener('pointermove', onPointerMove);
+    window.addEventListener('pointerup', stopDrag);
+  });
+
+  // double-clic sur la barre pour reset à 380px
+  resizer?.addEventListener('dblclick', () => {
+    document.documentElement.style.setProperty('--deck-w', '380px');
+    localStorage.removeItem(LS_DECK_W);
+  });
+
 
   // rendu
   buildGrid();

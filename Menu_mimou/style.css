@@ -1,7 +1,13 @@
 :root{
   --bg:#0b1020; --panel:#0f172a; --card:#111b36; --muted:#9aa7c7; --line:#1e2a4a;
   --ok:#10b981; --accent:#60a5fa; --accent-2:#f59e0b; --accent-3:#ef4444; --white:#e8efff;
+
+  /* nouveau : largeur du deck + barre de redimensionnement + taille des tuiles */
+  --deck-w: 380px;
+  --resizer-w: 8px;
+  --tile: 150px; /* largeur mini d’une tuile de recette dans le deck */
 }
+
 *{box-sizing:border-box}
 html,body{height:100%}
 body{
@@ -11,16 +17,48 @@ body{
   color:var(--white);
 }
 
-/* layout */
-.layout{display:grid;grid-template-columns:380px 1fr;gap:18px;padding:18px}
-@media (max-width:980px){.layout{grid-template-columns:1fr}}
+/* ============ LAYOUT ============ */
+/* 3 colonnes : deck | resizer | planner */
+.layout{
+  display:grid;
+  grid-template-columns: var(--deck-w) var(--resizer-w) 1fr;
+  gap:18px;
+  padding:18px;
+  height:100vh;              /* NEW: fige la hauteur -> permet le scroll interne du deck */
+}
 
-/* deck */
-.deck{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px}
+/* barre de redimensionnement */
+.resizer{
+  background: linear-gradient(to right, transparent, var(--line), transparent);
+  border-radius:6px;
+  cursor: col-resize;
+  min-height:100%;
+}
+.resizer:hover{ background: linear-gradient(to right, transparent, #2a3a63, transparent); }
+
+@media (max-width:980px){
+  .layout{grid-template-columns:1fr}
+  .resizer{display:none}
+}
+
+/* ============ DECK ============ */
+.deck{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:14px;
+  display:flex;             /* IMPORTANT: pour que la liste prenne toute la hauteur */
+  flex-direction:column;
+  min-width:280px;
+  max-width:min(70vw, 920px);
+  min-height:0;             /* NEW: autorise l’enfant à gérer son overflow */
+}
+
 .search{
   background:#0d1a36;border:1px solid var(--line);color:var(--white);
-  padding:15px 12px;border-radius:15px;width:min(360px,46vw);margin-bottom:12px;
+  padding:15px 12px;border-radius:15px;width:100%;margin-bottom:12px;
 }
+
 .deck-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:12px}
 .deck-tabs{display:flex;flex-wrap:wrap;gap:8px}
 .tab{
@@ -30,20 +68,46 @@ body{
 .tab.active{border-color:var(--accent);background:var(--accent);color:#071019}
 .tab:focus{outline:2px solid var(--accent);outline-offset:2px}
 
-.card-stack{position:relative;min-height:420px;padding-top:22px}
+/* Zone des cartes : grille de tuiles carrées + scroll */
+.card-stack{
+  position:relative;
+  flex:1 1 auto;      /* occupe l'espace restant dans le deck */
+  min-height:0;       /* indispensable pour que overflow fonctionne en flex */
+  overflow:auto;      /* ✅ scroll vertical ici uniquement */
+  padding:10px;
+  display:grid;       /* grille de tuiles */
+  grid-template-columns: repeat(auto-fill, minmax(var(--tile), 1fr));
+  gap:12px;
+  align-content:start;
+  scrollbar-gutter: stable; /* optionnel: évite les sauts de mise en page */
+}
+
+/* Tuile (carte) du deck : carrée */
 .card{
-  position:relative;width:100%;background:var(--card);border:1px solid var(--line);
-  border-radius:14px;padding:12px 14px;box-shadow:0 8px 20px rgba(0,0,0,.25);
+  width:100%;
+  aspect-ratio:1 / 1;
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:12px 14px;
+  box-shadow:0 8px 20px rgba(0,0,0,.25);
   transition:transform .18s ease,filter .18s ease,box-shadow .18s ease;
   cursor:grab;user-select:none;
+  display:flex;flex-direction:column;justify-content:space-between;
 }
-.card + .card{margin-top:-46px} /* empilement (titres visibles) */
-.card:hover{transform:translateX(10px) rotate(0.2deg);filter:brightness(1.05);z-index:999}
-.card .title{display:flex;gap:8px;font-weight:800;letter-spacing:.2px}
-.card .meta{color:var(--muted);font-size:12px;margin-top:4px}
+.card + .card{margin-top:0}
+.card:hover{transform:translateY(-2px);filter:brightness(1.05);z-index:1}
+.card .title{
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:2;
+  overflow:hidden;
+  gap:8px;font-weight:800;letter-spacing:.2px
+}
+.card .meta{color:var(--muted);font-size:12px;margin-top:6px}
 .badge{font-size:11px;padding:3px 8px;border-radius:999px;border:1px solid var(--line);opacity:.9}
 
-/* couleurs fun pour cartes pile */
+/* couleurs fun */
 .card[data-color="blue"]{ background:linear-gradient(180deg,#132a53,#132244) }
 .card[data-color="teal"]{ background:linear-gradient(180deg,#0c3b3b,#0b2f2f) }
 .card[data-color="amber"]{ background:linear-gradient(180deg,#3d2b0b,#2d220e) }
@@ -51,7 +115,7 @@ body{
 .card[data-color="violet"]{ background:linear-gradient(180deg,#1e1b4b,#17163b) }
 .card[data-color="green"]{ background:linear-gradient(180deg,#0f3620,#0b2b19) }
 
-/* boutons génériques */
+/* ============ BOUTONS ============ */
 .btn{
   appearance:none;border:1px solid var(--accent);background:var(--accent);color:#071019;
   font-weight:700;padding:10px 12px;border-radius:10px;cursor:pointer
@@ -59,8 +123,10 @@ body{
 .btn.ghost{background:transparent;color:var(--accent);border-color:var(--line)}
 .btn.strong{border-color:var(--ok);background:var(--ok)}
 
-/* planner */
-.planner{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px}
+/* ============ PLANNER ============ */
+.planner{
+  background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px
+}
 .planner-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
 .grid{
   display:grid;grid-template-columns:140px repeat(5,1fr);
@@ -104,7 +170,7 @@ body{
 .day-card[data-color="violet"]{border-left-color:#8b5cf6}
 .day-card[data-color="green"]{border-left-color:#10b981}
 
-/* modal */
+/* ============ MODAL ============ */
 .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(4,8,18,.6);backdrop-filter: blur(4px)}
 .modal.open{display:flex}
 .modal-content{width:min(820px,96vw);background:#0f172a;color:var(--white);border:1px solid var(--line);border-radius:14px;padding:16px;position:relative}
