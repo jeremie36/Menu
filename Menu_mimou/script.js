@@ -549,30 +549,317 @@ RECIPES.push(
   }
 );
 
+/* =========================
+   Marche à suivre : steps par recette
+   ========================= */
+const STEPS = {
+  /* ===== Matin ===== */
+  'toast-avocat-oeuf': [
+    'Toaster le pain.',
+    "Écraser l’avocat avec sel, poivre et un filet de citron (facultatif).",
+    'Cuire les œufs (au plat, pochés ou brouillés).',
+    'Tartiner l’avocat, ajouter les œufs, servir.'
+  ],
+  'pancakes-proteines-banane': [
+    'Écraser la banane puis mélanger flocons, whey, œuf, levure et miel.',
+    'Chauffer une poêle antiadhésive.',
+    'Cuire de petites louches 1–2 min par face.',
+    'Servir tiède.'
+  ],
+  'skyr-oleagineux-chia-choco': [
+    'Mettre le skyr dans un bol.',
+    'Ajouter la clémentine en quartiers, les graines de chia, le mélange oléagineux et les pépites.',
+    'Mélanger et déguster.'
+  ],
+  'tartine-oeuf-brouille-cottage': [
+    'Toaster le pain.',
+    'Battre les œufs et cuire à feu doux en brouillade.',
+    'Tartiner le cottage sur le pain, ajouter l’avocat en lamelles.',
+    'Déposer les œufs brouillés, assaisonner et servir.'
+  ],
+  'bowl-cake-avoine-banane-choco': [
+    'Mélanger flocons, banane écrasée, œuf, lait, levure, miel et chocolat.',
+    'Verser dans un bol haut.',
+    'Cuire 2–3 min au micro-ondes (ou 12 min à 180°C).',
+    'Laisser tiédir et démouler.'
+  ],
+  'avocado-toast-cottage': [
+    'Toaster le pain au levain.',
+    'Tartiner le cottage, ajouter l’avocat en tranches.',
+    'Zester/arroser d’un peu de citron vert, saler/poivrer.',
+    'Servir immédiatement.'
+  ],
+  'pudding-chia-mangue-pro': [
+    'Mixer lait, tofu soyeux et miel.',
+    'Mélanger avec les graines de chia dans un bocal.',
+    'Laisser épaissir au frais (au moins 30–60 min, idéalement 2–3 h).',
+    'Ajouter la mangue au moment de servir.'
+  ],
+  'overnight-oat-banane-pro': [
+    'Dans un bocal, mélanger flocons, lait, yaourt, graines de chia et banane en dés.',
+    'Fermer et laisser une nuit au frais.',
+    'Mélanger avant de déguster.'
+  ],
+  'tartine-beurre-cacahuete-banane': [
+    'Toaster le pain.',
+    'Tartiner le beurre de cacahuète.',
+    'Ajouter la banane en rondelles.',
+    'Servir.'
+  ],
+  'toasts-hummus-avocat-feta': [
+    'Toaster les tranches.',
+    'Tartiner d’houmous.',
+    'Ajouter l’avocat en lamelles puis la feta émiettée.',
+    'Assaisonner et servir.'
+  ],
+  'pancakes-sans-gluten-sans-lactose-pro': [
+    'Écraser la banane, ajouter œuf, whey et noix de coco râpée.',
+    'Mélanger jusqu’à consistance homogène.',
+    'Cuire de petites pancakes 1–2 min par face.',
+    'Servir.'
+  ],
+  'toast-oeuf-avocat': [
+    'Toaster le pain.',
+    "Écraser l’avocat (sel, poivre, citron).",
+    'Cuire les œufs (au plat/brouillés).',
+    'Tartiner l’avocat, parsemer de chia, ajouter les œufs.'
+  ],
+  'toasts-avocat-feta': [
+    'Toaster le pain.',
+    'Écraser l’avocat et l’étaler sur les toasts.',
+    'Ajouter la feta émiettée, tomates cerises et oignon rouge émincé.',
+    'Assaisonner et servir.'
+  ],
+  'pudding-chia-simple': [
+    'Mélanger boisson amande, chia et flocons d’avoine.',
+    'Laisser gonfler 1 h au frais en remuant une fois.',
+    'Ajouter pomme en dés, framboises et chocolat au moment de servir.',
+    'Sucrer au miel si besoin.'
+  ],
+  'pudding-chia-coco-mangue': [
+    'Mélanger lait de coco, graines de chia et sirop d’agave.',
+    'Laisser épaissir 2 h au frais.',
+    'Ajouter mangue en dés et un filet de citron vert à la fin.'
+  ],
+
+  /* ===== Midi ===== */
+  'repas-poulet-grille-quinoa-legumes': [
+    'Rincer et cuire le quinoa selon le paquet.',
+    'Assaisonner et griller le poulet.',
+    'Sauter courgette, poivron, oignon et champignons avec un filet d’huile.',
+    'Servir poulet + légumes sur le quinoa.'
+  ],
+  'repas-pdt-aux-herbes': [
+    'Préchauffer le four à 200°C.',
+    'Couper les pommes de terre, mélanger avec huile et herbes; rôtir 35–40 min.',
+    'Mélanger fromage blanc, échalote, ciboulette et citron (sauce).',
+    'Servir avec jambon de poulet et salade assaisonnée.'
+  ],
+  'repas-poulet-curry-coco-riz': [
+    'Cuire le riz.',
+    'Saisir le poulet, ajouter courgette, curry et sauce soja.',
+    'Verser le lait de coco et mijoter 8–10 min.',
+    'Servir avec le riz, parsemer de noix.'
+  ],
+  'repas-poulet-citron-courgette-riz': [
+    'Cuire le riz.',
+    'Mariner le poulet avec citron vert, piment, coriandre, sel/poivre.',
+    'Griller le poulet et poêler la courgette.',
+    'Servir poulet + courgette avec le riz.'
+  ],
+  'repas-salade-quinoa-tofu-courgette': [
+    'Cuire le quinoa puis refroidir.',
+    'Saisir le tofu en dés.',
+    'Tailler la courgette finement.',
+    'Assaisonner (huile de sésame, sauce soja, citron) et mélanger.'
+  ],
+  'repas-quiche-legumes': [
+    'Préchauffer le four à 180°C.',
+    'Sauter oignon, carotte et courgette.',
+    'Battre œufs + lait, ajouter gruyère et épices.',
+    'Garnir la pâte, ajouter légumes, cuire 35–40 min.'
+  ],
+  'repas-riz-saute-boeuf': [
+    'Cuire/laisser refroidir le riz si nécessaire.',
+    'Saisir le bœuf avec gingembre.',
+    'Ajouter haricots verts et sauce soja; sauter 3–4 min.',
+    'Mélanger avec le riz et servir.'
+  ],
+  'repas-poulet-roti-legumes': [
+    'Préchauffer le four à 200°C.',
+    'Assaisonner le poulet, disposer légumes autour avec huile.',
+    'Rôtir ~1 h 15–1 h 30 en arrosant (selon taille).',
+    'Laisser reposer puis servir.'
+  ],
+  'repas-wrap-poulet-crudites-sg': [
+    'Émincer poulet cuit, tomate et carotte.',
+    'Tartiner la sauce au fromage blanc sur le wrap.',
+    'Ajouter salade et garniture, rouler serré.',
+    'Couper et servir.'
+  ],
+  'repas-bowl-lentilles-saumon-oeuf': [
+    'Cuire l’œuf (mollet ou dur) puis refroidir.',
+    'Dresser lentilles, saumon fumé, avocat et salade.',
+    'Arroser de citron, saler/poivrer.',
+    'Ajouter l’œuf, servir.'
+  ],
+  'repas-boulette-cabillaud-tomate': [
+    'Mixer cabillaud avec pain trempé dans le lait, œuf et persil.',
+    'Façonner des boulettes et les dorer à l’huile.',
+    'Ajouter la tomate pelée et mijoter 10–15 min.',
+    'Servir avec des pâtes.'
+  ],
+  'repas-salade-quinoa-tofu-courgette-2p': [
+    'Cuire le mélange de quinoa puis refroidir.',
+    'Dorer le tofu en dés.',
+    'Tailler la courgette, assaisonner (sésame, soja, citron).',
+    'Mélanger et servir.'
+  ],
+  'repas-salade-lentilles-saumon-oeuf-4p': [
+    'Cuire les lentilles avec laurier et thym puis égoutter.',
+    'Préparer une vinaigrette moutarde + vinaigre de Xérès + huile.',
+    'Cuire les œufs mollets, refroidir et écaler.',
+    'Mélanger lentilles, oignon rouge, mâche, saumon fumé et œufs.'
+  ],
+  'repas-salade-poulet-sesame': [
+    'Cuire/griller le poulet et l’émincer.',
+    'Mélanger avec pousses de soja, coriandre et graines de sésame.',
+    'Assaisonner huile de sésame, sel/poivre.',
+    'Servir frais.'
+  ],
+  'repas-salade-lentilles-quinoa-legumes-feta': [
+    'Rôtir courgettes, poivron, carottes et oignon avec huile.',
+    'Cuire lentilles et quinoa séparément.',
+    'Mélanger le tout avec persil, citron et assaisonnement.',
+    'Ajouter la feta émiettée, servir.'
+  ],
+  'repas-orzo-epinards': [
+    'Suer échalote et ail, ajouter l’orzo et le nacrer.',
+    'Mouiller progressivement avec bouillon jusqu’à cuisson.',
+    'Incorporer tomates, épinards, beurre et parmesan.',
+    'Assaisonner et servir crémeux.'
+  ],
+  'repas-salade-roquette-feta-pasteque-tofu': [
+    'Poêler ou griller le tofu.',
+    'Mélanger roquette, pastèque et herbes.',
+    'Assaisonner (balsamique, huile, citron).',
+    'Ajouter feta et tofu, servir.'
+  ],
+  'repas-riz-courgettes-oeuf-mollet': [
+    'Cuire le riz.',
+    'Poêler la courgette avec un filet d’huile.',
+    'Cuire les œufs mollets (6–7 min) et refroidir.',
+    'Assembler riz + courgette + œufs, assaisonner.'
+  ],
+  'repas-cottage-wrap-roquette-houmous': [
+    'Mélanger cottage avec sel, poivre et ciboulette.',
+    'Tartiner wrap de houmous, ajouter mesclun et cottage.',
+    'Cuire l’œuf dur ou mollet, trancher et ajouter.',
+    'Rouler serré et servir.'
+  ],
+  'repas-sandwich-thon-avocat': [
+    'Égoutter le thon et mélanger avec la mayonnaise.',
+    'Tartiner le pain, ajouter avocat en tranches et tomate.',
+    'Ajouter le thon, refermer et servir.'
+  ],
+  'poke-bowl-saumon': [
+    'Cuire puis refroidir le riz.',
+    'Couper le saumon et l’avocat en dés.',
+    'Mélanger mayonnaise, citron et sriracha (sauce).',
+    'Dresser riz, saumon, avocat, salade et napper de sauce.'
+  ],
+  'salade-lentilles-oeuf-mollet': [
+    'Cuire les lentilles avec laurier/thym, égoutter.',
+    'Préparer vinaigrette (moutarde, Xérès, huile).',
+    'Cuire les œufs mollets, refroidir et écaler.',
+    'Mélanger lentilles, herbes, échalote; ajouter les œufs.'
+  ],
+  'salade-poulet-crudites': [
+    'Cuire/griller le poulet et l’émincer.',
+    'Couper concombre, tomate, poivron et oignon rouge.',
+    'Mélanger avec la romaine, assaisonner d’huile d’olive et sel.',
+    'Ajouter le poulet et servir.'
+  ],
+
+  /* ===== Collations (AM) ===== */
+  'collation-crudites-avant-repas': [
+    'Laver/éplucher concombre et carotte.',
+    'Couper les crudités (ajouter maïs, asperge, melon).',
+    'Servir nature ou avec un dip léger.'
+  ],
+  'collation-energy-balls-dattes-cacao': [
+    'Mixer amandes et dattes avec cacao.',
+    'Ajouter purée d’amande, chia et un peu d’eau si besoin.',
+    'Façonner des billes et les rouler dans la noix de coco.',
+    'Réfrigérer 1 h pour raffermir.'
+  ],
+  'collation-toasts-houmous-avocat-feta': [
+    'Toaster le pain.',
+    'Tartiner d’houmous, ajouter avocat en lamelles et feta.',
+    'Finir avec graines ou grenade en topping.',
+    'Servir aussitôt.'
+  ],
+  'collation-pan-con-tomate': [
+    'Griller la baguette et frotter d’ail.',
+    'Râper/écraser la tomate, saler et huiler.',
+    'Tartiner et servir.'
+  ],
+
+  /* ===== Desserts (PM) ===== */
+  'dessert-overnight-chocolat': [
+    'Dans un bocal, mélanger flocons, fromage blanc, lait, agave, cacao et chia.',
+    'Laisser au frais au moins 3 h (idéalement une nuit).',
+    'Mélanger, ajouter les pépites et déguster.'
+  ],
+  'dessert-tartine-cacahuete-banane': [
+    'Toaster le pain.',
+    'Tartiner de beurre de cacahuète.',
+    'Ajouter la banane en rondelles et servir.'
+  ],
+  'dessert-yaourt-glace-fruits-rouges': [
+    'Mélanger yaourt grec et beurre de cacahuète.',
+    'Ajouter fruits rouges surgelés, mélanger brièvement.',
+    'Servir immédiatement ou réserver 20–30 min au congélateur.'
+  ],
+  'dessert-yaourt-glace-framboise': [
+    'Mélanger skyr/yaourt et vanille.',
+    'Incorporer les framboises.',
+    'Étaler et congeler 1–2 h, parsemer d’amandes avant service.'
+  ],
+  'dessert-skyr-oleagineux-choco': [
+    'Mettre le skyr dans un bol.',
+    'Ajouter agrumes, graines de chia, chocolat et oléagineux.',
+    'Mélanger et servir.'
+  ],
+  'dessert-banana-bread-sg-sl': [
+    'Préchauffer le four à 180°C.',
+    'Écraser les bananes; ajouter œufs et huile de coco.',
+    'Incorporer farines, poudre d’amande, levure, sel, cannelle et chocolat.',
+    'Verser dans un moule et cuire 45–55 min.'
+  ]
+};
 
 
 
 /* =========================
    Constantes & état
    ========================= */
-
-   const LS_DECK_W = 'planner-deck-w';
-
+const LS_DECK_W = 'planner-deck-w';
 const DAYS = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
 const MEALS = [
-  { key:'matin',         label:'Matin' },
-  { key:'collation-am',  label:'Collation matin' },
-  { key:'midi',          label:'Midi' },
-  { key:'collation-pm',  label:'Collation après-midi' },
-  { key:'soir',          label:'Soir' }
+  { key:'matin', label:'Matin' },
+  { key:'collation-am', label:'Collation matin' },
+  { key:'midi', label:'Midi' },
+  { key:'collation-pm', label:'Collation après-midi' },
+  { key:'soir', label:'Soir' }
 ];
 const LS_KEY = 'planner-5slots-v1';
 
 let activeCat = 'matin';
-let planner; // sera chargé dans init()
+let planner;
 
 /* =========================
-   Refs DOM (assignées dans init)
+   Refs DOM
    ========================= */
 let deckList, searchEl, grid, clearBtn;
 let modal, modalTitle, modalBody, modalAdd, modalClose;
@@ -608,22 +895,41 @@ function addToCell(day, meal, id){ planner[day][meal].push(id); savePlanner(); }
 function removeFromCell(day, meal, index){ planner[day][meal].splice(index,1); savePlanner(); }
 function emojiFromColor(c){ return c==='green'?'🌿':c==='amber'?'🌞':c==='rose'?'🌺':c==='blue'?'🌊':c==='violet'?'🔮':'🧊'; }
 
+/* ===== Modal lock helpers (GLOBAL) ===== */
+function lockBackground() {
+  const app = document.querySelector('.layout');
+  if (app) {
+    app.setAttribute('aria-hidden','true');
+    try { app.inert = true; } catch(_) {}
+  }
+  document.body.classList.add('modal-open');
+}
+function unlockBackground() {
+  const app = document.querySelector('.layout');
+  if (app) {
+    app.setAttribute('aria-hidden','false');
+    try { app.inert = false; } catch(_) {}
+  }
+  document.body.classList.remove('modal-open');
+}
+
 /* =========================
    Deck (pile de cartes)
    ========================= */
 function deckCardHTML(r, i){
-  const z = i + 1; // titres toujours visibles (empilement inversé lisible)
+  const z = i + 1;
   return `
     <article class="card" draggable="true"
              data-id="${r.id}" data-color="${r.color||'green'}"
              style="z-index:${z}">
       <div class="title">${emojiFromColor(r.color)} <span>${r.title}</span></div>
-      <div class="meta">${r.author?`par ${r.author} • `:''}${r.time} • ${r.portions} p.</div>
+      <div class="meta">${r.time} • ${r.portions} p.</div>
       <span class="badge">Glisse-moi ➜</span>
     </article>`;
 }
+
 function renderDeck(){
-  if (!deckList) return; // ✅ sécurité anti-crash
+  if (!deckList) return;
   const q = (searchEl?.value||'').toLowerCase().trim();
   const items = RECIPES.filter(r => r.category === activeCat && (!q || r.title.toLowerCase().includes(q)));
   deckList.innerHTML = items.map(deckCardHTML).join('');
@@ -638,7 +944,7 @@ function renderDeck(){
 }
 
 /* =========================
-   Grille semaine (5 slots/jour)
+   Grille semaine
    ========================= */
 function buildGrid(){
   grid.innerHTML = `
@@ -681,6 +987,7 @@ function renderCells(){
 }
 function dayCardHTML(r, day, meal, index){
   const ings = (r.ingredients||[]).map(i=>`• ${i.name}: ${i.qty}${i.unit?(' '+i.unit):''}`).join('<br>');
+  const steps = (STEPS[r.id]||[]).map(s=>`<li>${s}</li>`).join('');
   return `
     <div class="day-card" draggable="true"
          data-id="${r.id}" data-day="${day}" data-meal="${meal}" data-index="${index}"
@@ -688,18 +995,25 @@ function dayCardHTML(r, day, meal, index){
       <div class="top">
         <div class="name">${r.title}</div>
         <div class="controls">
-          <button class="icon-btn js-expand">Lire</button>
+          <!-- Bouton Lire retiré -->
           <button class="icon-btn js-remove">Retirer</button>
         </div>
       </div>
       <div class="body">
         <div class="meta">${r.time} • ${r.portions} p.</div>
         <div class="ing" style="margin-top:4px">${ings}</div>
+        ${steps ? `
+          <div class="steps" style="margin-top:8px">
+            <div style="font-weight:600;margin:6px 0 4px">Marche à suivre</div>
+            <ol style="padding-left:18px;margin:0">${steps}</ol>
+          </div>` : ``}
       </div>
     </div>`;
 }
+
 function bindDayCards(){
   grid.querySelectorAll('.day-card').forEach(card=>{
+    // DRAG payload
     card.addEventListener('dragstart', e=>{
       const payload = {
         id: card.dataset.id,
@@ -710,15 +1024,34 @@ function bindDayCards(){
       e.dataTransfer.setData('application/json', JSON.stringify(payload));
       e.dataTransfer.setData('text/plain', card.dataset.id);
       e.dataTransfer.effectAllowed = 'move';
+      // Marque qu'il y a eu un drag pour ignorer le clic juste après
+      card.dataset.dragging = '1';
     });
-    card.querySelector('.js-expand').addEventListener('click', ()=> card.classList.toggle('expanded'));
-    card.querySelector('.js-remove').addEventListener('click', ()=>{
+    card.addEventListener('dragend', ()=>{
+      card.dataset.dragging = '';
+      card.dataset.lastDragAt = String(Date.now());
+    });
+
+    // Ouvre la modale quand on clique sur la carte (sauf bouton Retirer)
+    card.addEventListener('click', (e)=>{
+      if (e.target.closest('.js-remove')) return; // on laisse le bouton faire son job
+      // évite l'ouverture juste après un drag
+      const last = Number(card.dataset.lastDragAt || 0);
+      if (last && Date.now() - last < 200) return;
+      openRecipeModal(card.dataset.id);
+    });
+
+    // Bouton Retirer
+    const btnRemove = card.querySelector('.js-remove');
+    btnRemove.addEventListener('click', (e)=>{
+      e.stopPropagation(); // n'ouvre pas la modale
       removeFromCell(card.dataset.day, card.dataset.meal, Number(card.dataset.index));
       renderCells();
       updateSummaryPanel();
     });
   });
 }
+
 function onDropIntoCell(e){
   e.preventDefault();
   const cell = e.currentTarget;
@@ -746,16 +1079,23 @@ function onDropIntoCell(e){
    ========================= */
 function openRecipeModal(id){
   const r = byId(id); if(!r) return;
+  const steps = STEPS[r.id] || [];
   modalTitle.textContent = r.title;
   modalBody.innerHTML = `
-    <div><strong>Auteur</strong> : ${r.author||'—'} • <strong>Temps</strong> : ${r.time} • <strong>Portions</strong> : ${r.portions}</div>
+    <div><strong>Temps</strong> : ${r.time} • <strong>Portions</strong> : ${r.portions}</div>
     <h4>Ingrédients</h4>
     <ul>${(r.ingredients||[]).map(i=>`<li>${i.name}: <strong>${i.qty}${i.unit?(' '+i.unit):''}</strong></li>`).join('')}</ul>
+    ${steps.length ? `<h4>Marche à suivre</h4><ol>${steps.map(s=>`<li>${s}</li>`).join('')}</ol>` : '' }
   `;
-  modal.classList.add('open'); modal.setAttribute('aria-hidden','false');
+  modal.classList.add('open');
+  modal.setAttribute('aria-hidden','false');
+  lockBackground();
 }
-function closeRecipeModal(){ modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); }
-
+function closeRecipeModal(){
+  modal.classList.remove('open');
+  modal.setAttribute('aria-hidden','true');
+  unlockBackground();
+}
 function addTodayFromModal(){
   const title = modalTitle.textContent;
   const r = RECIPES.find(x=>x.title===title);
@@ -769,8 +1109,8 @@ function addTodayFromModal(){
 /* =========================
    Résumé ingrédients
    ========================= */
-function openSummary(){ summary?.classList.add('open'); summary?.setAttribute('aria-hidden','false'); }
-function closeSummary(){ summary?.classList.remove('open'); summary?.setAttribute('aria-hidden','true'); }
+function openSummary(){ summary?.classList.add('open'); summary?.setAttribute('aria-hidden','false'); lockBackground(); }
+function closeSummary(){ summary?.classList.remove('open'); summary?.setAttribute('aria-hidden','true'); unlockBackground(); }
 
 function aggregateIngredients(){
   const bag = {};
@@ -792,16 +1132,13 @@ function formatQty(n){ const r = Math.round((Number(n)||0)*100)/100; return (r%1
 function updateSummaryPanel(){
   if(!summaryBody) return;
   const bag = aggregateIngredients();
-  const lines = Object.values(bag)
-    .sort((a,b)=>a.name.localeCompare(b.name))
-    .map(x=>`<li>${x.name}: <strong>${formatQty(x.qty)}${x.unit?(' '+x.unit):''}</strong></li>`)
-    .join('');
+  const lines = Object.values(bag).sort((a,b)=>a.name.localeCompare(b.name))
+    .map(x=>`<li>${x.name}: <strong>${formatQty(x.qty)}${x.unit?(' '+x.unit):''}</strong></li>`).join('');
   summaryBody.innerHTML = lines ? `<ul>${lines}</ul>` : `<p class="muted">Aucun ingrédient (tableau vide).</p>`;
 }
 async function copySummary(){
   const bag = aggregateIngredients();
-  const text = Object.values(bag)
-    .sort((a,b)=>a.name.localeCompare(b.name))
+  const text = Object.values(bag).sort((a,b)=>a.name.localeCompare(b.name))
     .map(x=>`${x.name}: ${formatQty(x.qty)}${x.unit?(' '+x.unit):''}`).join('\n');
   try{
     await navigator.clipboard.writeText(text);
@@ -827,7 +1164,7 @@ function bindTabs(){
 }
 
 /* =========================
-   Init (après DOM prêt)
+   Init
    ========================= */
 document.addEventListener('DOMContentLoaded', () => {
   // refs
@@ -871,56 +1208,45 @@ document.addEventListener('DOMContentLoaded', () => {
   printSummaryBtn?.addEventListener('click', ()=>window.print());
   copySummaryBtn?.addEventListener('click', copySummary);
 
-
-    const layoutEl = document.querySelector('.layout');
+  // resizer deck
+  const layoutEl = document.querySelector('.layout');
   const resizer = document.getElementById('deck-resizer');
 
-  // largeur mémorisée
   const savedDeckW = Number(localStorage.getItem(LS_DECK_W));
   if (savedDeckW) document.documentElement.style.setProperty('--deck-w', savedDeckW + 'px');
 
-  // drag pour redimensionner
   let dragging = false;
-
   const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
 
   const onPointerMove = (e) => {
     if (!dragging) return;
     const rect = layoutEl.getBoundingClientRect();
-    // largeur = position du curseur relative au bord gauche du layout
     let w = e.clientX - rect.left;
-    // bornes cohérentes avec le CSS
     const minW = 280;
     const maxW = Math.min(window.innerWidth * 0.7, 920);
     w = clamp(w, minW, maxW);
     document.documentElement.style.setProperty('--deck-w', w + 'px');
   };
-
   const stopDrag = () => {
     if (!dragging) return;
     dragging = false;
-    // on mémorise
     const current = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--deck-w'));
     localStorage.setItem(LS_DECK_W, String(Math.round(current)));
     window.removeEventListener('pointermove', onPointerMove);
     window.removeEventListener('pointerup', stopDrag);
   };
-
   resizer?.addEventListener('pointerdown', (e) => {
     dragging = true;
     e.preventDefault();
     window.addEventListener('pointermove', onPointerMove);
     window.addEventListener('pointerup', stopDrag);
   });
-
-  // double-clic sur la barre pour reset à 380px
   resizer?.addEventListener('dblclick', () => {
     document.documentElement.style.setProperty('--deck-w', '380px');
     localStorage.removeItem(LS_DECK_W);
   });
 
-
-  // rendu
+  // rendu initial
   buildGrid();
   renderCells();
   renderDeck();

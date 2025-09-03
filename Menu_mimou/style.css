@@ -2,10 +2,14 @@
   --bg:#0b1020; --panel:#0f172a; --card:#111b36; --muted:#9aa7c7; --line:#1e2a4a;
   --ok:#10b981; --accent:#60a5fa; --accent-2:#f59e0b; --accent-3:#ef4444; --white:#e8efff;
 
-  /* nouveau : largeur du deck + barre de redimensionnement + taille des tuiles */
+  /* largeur du deck + barre + taille tuiles */
   --deck-w: 380px;
   --resizer-w: 8px;
-  --tile: 150px; /* largeur mini d’une tuile de recette dans le deck */
+  --tile: 150px;
+
+  /* hauteur mini/max d’une cellule (s’adapte au viewport) */
+  --slot-min: 80px;
+  --slot-max: 150px;
 }
 
 *{box-sizing:border-box}
@@ -15,19 +19,17 @@ body{
   font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,sans-serif;
   background:linear-gradient(180deg,#0b1020 0%, #0e1630 100%);
   color:var(--white);
+  overflow: hidden; /* pas de scroll global */
 }
 
 /* ============ LAYOUT ============ */
-/* 3 colonnes : deck | resizer | planner */
 .layout{
   display:grid;
   grid-template-columns: var(--deck-w) var(--resizer-w) 1fr;
   gap:18px;
   padding:18px;
-  height:100vh;              /* NEW: fige la hauteur -> permet le scroll interne du deck */
+  height:100dvh; /* mobile-safe viewport */
 }
-
-/* barre de redimensionnement */
 .resizer{
   background: linear-gradient(to right, transparent, var(--line), transparent);
   border-radius:6px;
@@ -36,29 +38,22 @@ body{
 }
 .resizer:hover{ background: linear-gradient(to right, transparent, #2a3a63, transparent); }
 
-@media (max-width:980px){
-  .layout{grid-template-columns:1fr}
-  .resizer{display:none}
-}
-
 /* ============ DECK ============ */
 .deck{
   background:var(--panel);
   border:1px solid var(--line);
   border-radius:16px;
   padding:14px;
-  display:flex;             /* IMPORTANT: pour que la liste prenne toute la hauteur */
+  display:flex;
   flex-direction:column;
   min-width:280px;
   max-width:min(70vw, 920px);
-  min-height:0;             /* NEW: autorise l’enfant à gérer son overflow */
+  min-height:0;
 }
-
 .search{
   background:#0d1a36;border:1px solid var(--line);color:var(--white);
   padding:15px 12px;border-radius:15px;width:100%;margin-bottom:12px;
 }
-
 .deck-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:12px}
 .deck-tabs{display:flex;flex-wrap:wrap;gap:8px}
 .tab{
@@ -68,21 +63,21 @@ body{
 .tab.active{border-color:var(--accent);background:var(--accent);color:#071019}
 .tab:focus{outline:2px solid var(--accent);outline-offset:2px}
 
-/* Zone des cartes : grille de tuiles carrées + scroll */
+/* grille cartes */
 .card-stack{
   position:relative;
-  flex:1 1 auto;      /* occupe l'espace restant dans le deck */
-  min-height:0;       /* indispensable pour que overflow fonctionne en flex */
-  overflow:auto;      /* ✅ scroll vertical ici uniquement */
+  flex:1 1 auto;
+  min-height:0;
+  overflow:auto;
   padding:10px;
-  display:grid;       /* grille de tuiles */
+  display:grid;
   grid-template-columns: repeat(auto-fill, minmax(var(--tile), 1fr));
   gap:12px;
   align-content:start;
-  scrollbar-gutter: stable; /* optionnel: évite les sauts de mise en page */
+  scrollbar-gutter: stable;
 }
 
-/* Tuile (carte) du deck : carrée */
+/* Tuile */
 .card{
   width:100%;
   aspect-ratio:1 / 1;
@@ -95,14 +90,10 @@ body{
   cursor:grab;user-select:none;
   display:flex;flex-direction:column;justify-content:space-between;
 }
-.card + .card{margin-top:0}
 .card:hover{transform:translateY(-2px);filter:brightness(1.05);z-index:1}
 .card .title{
-  display:-webkit-box;
-  -webkit-box-orient:vertical;
-  -webkit-line-clamp:2;
-  overflow:hidden;
-  gap:8px;font-weight:800;letter-spacing:.2px
+  display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;
+  overflow:hidden;gap:8px;font-weight:800;letter-spacing:.2px
 }
 .card .meta{color:var(--muted);font-size:12px;margin-top:6px}
 .badge{font-size:11px;padding:3px 8px;border-radius:999px;border:1px solid var(--line);opacity:.9}
@@ -125,44 +116,105 @@ body{
 
 /* ============ PLANNER ============ */
 .planner{
-  background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:14px;
+
+  /* keep inside page, allow inner scroll */
+  display:flex;
+  flex-direction:column;
+  min-height:0;
+  min-width:0;
 }
 .planner-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+
+/* grille de la semaine */
 .grid{
-  display:grid;grid-template-columns:140px repeat(5,1fr);
+  display:grid;
+  grid-template-columns:60px repeat(5, minmax(0, 1fr)); /* shrinkable columns */
   border-top:1px solid var(--line);border-left:1px solid var(--line);
-  border-radius:12px;overflow:hidden
+  border-radius:12px;
+
+  /* take remaining space in planner and scroll internally */
+  flex:1 1 auto;
+  min-height:0;
+  overflow:auto;
 }
 .grid-head,.cell{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px}
-.grid-head{background:#0b142c;font-weight:800}
-.row-head{background:#0b142c;font-weight:700}
+.grid-head{background:#0b142c;font-weight:800;position:sticky;top:0;z-index:1}
+.row-head{background:#0b142c;font-weight:700;position:sticky;left:0;z-index:1}
 
-/* cellules */
-.cell{min-height:120px;position:relative}
+/* CELLULES — responsive par container queries */
+.cell{
+  /* hauteur fluide par défaut (reste dans la page) */
+  min-height: clamp(var(--slot-min), 12dvh, var(--slot-max));
+
+  position:relative;
+
+  /* Active les container-queries et les unités cqi */
+  container-type:inline-size;
+  container-name:planner-cell;
+}
 .cell .placeholder{color:var(--muted);font-size:12px}
 .drop-hover{outline:2px dashed var(--accent);outline-offset:-6px}
 
-/* conteneur de cartes dans une cellule */
-.cell-list{display:flex;flex-direction:column;gap:8px}
-
-/* mini cartes dans la semaine */
-.day-card{
-  background:#0e1c3c;border:1px solid var(--line);border-left:8px solid var(--accent);
-  border-radius:10px;padding:8px;display:flex;flex-direction:column;gap:6px;
-  font-size:14px;cursor:grab
+/* Liste interne : pile verticale par défaut */
+.cell-list{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
 }
-.day-card .top{display:flex;justify-content:space-between;gap:8px}
-.day-card .name{font-weight:700}
-.day-card .controls{display:flex;gap:6px}
+
+/* === PASSAGE AUTOMATIQUE EN COLONNES LORSQU’IL Y A BEAUCOUP DE CARTES === */
+/* 3+ cartes ➜ tenter 2 colonnes si la cellule est assez large */
+@container planner-cell (min-width: 420px){
+  .cell-list:has(.day-card:nth-child(n+3)){
+    display:grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap:8px;
+  }
+}
+/* 5+ cartes ➜ 3 colonnes si possible */
+@container planner-cell (min-width: 680px){
+  .cell-list:has(.day-card:nth-child(n+5)){
+    grid-template-columns: repeat(3, minmax(0,1fr));
+    gap:8px;
+  }
+}
+
+/* DAY-CARD — base + échelle fluide sur la largeur de la cellule */
+.day-card{
+  /* variables fluides reliées à la largeur du container (cqi) */
+  --dc-pad: clamp(6px, 2cqi, 12px);
+  --dc-gap: clamp(4px, 1.2cqi, 8px);
+  --dc-fs: clamp(11px, 1.4cqi, 15px);     /* titre/ligne principale */
+  --dc-meta: clamp(10px, 1.2cqi, 14px);   /* détails */
+  --dc-btn-fs: clamp(10px, 1.1cqi, 12px);
+  --dc-btn-py: clamp(2px, .8cqi, 4px);
+  --dc-btn-px: clamp(6px, 1.2cqi, 10px);
+
+  background:#0e1c3c;border:1px solid var(--line);border-left:8px solid var(--accent);
+  border-radius:10px;
+  padding:var(--dc-pad);
+  display:flex;flex-direction:column;gap:var(--dc-gap);
+  font-size:var(--dc-fs);cursor:grab;min-width:0;
+}
+.day-card .top{display:flex;justify-content:space-between;gap:8px;min-width:0}
+.day-card .name{
+  font-weight:700;
+  display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;
+}
+.day-card .controls{display:flex;gap:6px;flex-shrink:0}
 .icon-btn{
   background:transparent;border:1px solid var(--line);color:var(--muted);
-  border-radius:8px;padding:4px 8px;cursor:pointer;font-size:12px
+  border-radius:8px;padding:var(--dc-btn-py) var(--dc-btn-px);cursor:pointer;font-size:var(--dc-btn-fs)
 }
 .icon-btn:hover{color:var(--white);border-color:var(--accent)}
-.day-card .body{display:none;font-size:13px;color:#c6d3ff}
+.day-card .body{display:none;font-size:var(--dc-meta);color:#c6d3ff}
 .day-card.expanded .body{display:block}
 
-/* couleurs fun pour day-cards */
+/* couleurs bordures mini cartes */
 .day-card[data-color="blue"]{border-left-color:#3b82f6}
 .day-card[data-color="teal"]{border-left-color:#14b8a6}
 .day-card[data-color="amber"]{border-left-color:#f59e0b}
@@ -170,9 +222,97 @@ body{
 .day-card[data-color="violet"]{border-left-color:#8b5cf6}
 .day-card[data-color="green"]{border-left-color:#10b981}
 
+/* — MODE DENSE selon le NOMBRE DE CARTES DANS LA CELLULE — */
+/* 2+ cartes ➜ léger compactage */
+.cell-list:has(.day-card:nth-child(n+2)) .day-card{
+  --dc-pad: clamp(5px, 1.6cqi, 9px);
+  --dc-gap: clamp(4px, 1cqi, 6px);
+  --dc-fs: clamp(11px, 1.2cqi, 14px);
+  --dc-meta: clamp(10px, 1.1cqi, 13px);
+}
+/* 3+ cartes ➜ plus compact, titre sur 1 ligne, cacher le bouton Lire */
+.cell-list:has(.day-card:nth-child(n+3)) .day-card{
+  --dc-pad: clamp(4px, 1.4cqi, 8px);
+  --dc-gap: clamp(3px, .9cqi, 6px);
+  --dc-fs: clamp(11px, 1.15cqi, 13px);
+  --dc-meta: clamp(10px, 1cqi, 12px);
+  border-left-width:6px;
+}
+.cell-list:has(.day-card:nth-child(n+3)) .day-card .name{ -webkit-line-clamp:1; }
+.cell-list:has(.day-card:nth-child(n+3)) .day-card .js-expand{ display:none; }
+
+/* 5+ cartes ➜ très dense, masquer les détails */
+.cell-list:has(.day-card:nth-child(n+5)) .day-card{
+  --dc-pad: clamp(3px, 1.2cqi, 7px);
+  --dc-gap: clamp(2px, .8cqi, 5px);
+  --dc-fs: clamp(10px, 1.05cqi, 12px);
+  --dc-meta: clamp(9px, .9cqi, 11px);
+  border-left-width:6px;
+}
+.cell-list:has(.day-card:nth-child(n+5)) .day-card .body{ display:none !important; }
+
 /* ============ MODAL ============ */
-.modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(4,8,18,.6);backdrop-filter: blur(4px)}
-.modal.open{display:flex}
-.modal-content{width:min(820px,96vw);background:#0f172a;color:var(--white);border:1px solid var(--line);border-radius:14px;padding:16px;position:relative}
+.modal{
+  position:fixed; inset:0; display:none;
+  align-items:center; justify-content:center;
+  padding:18px; background:rgba(4,8,18,.6);
+  backdrop-filter: blur(4px);
+  z-index: 9998;
+  pointer-events: none;
+}
+.modal.open{ display:flex; pointer-events: auto; }
+
+.modal-content{
+  width:min(820px,96vw); background:#0f172a; color:var(--white);
+  border:1px solid var(--line); border-radius:14px; padding:16px;
+  position:relative; z-index: 1000;
+}
 .close{position:absolute;right:10px;top:10px;background:#0a1228;border:1px solid var(--line);color:#b9c6ea;border-radius:999px;width:34px;height:34px;cursor:pointer}
 .modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:10px}
+
+/* fond inerte quand modale ouverte */
+body.modal-open .layout{ pointer-events: none !important; user-select: none !important; }
+.modal.open{ user-select: none; }
+.modal.open .modal-content, .modal.open .modal-content *{ user-select: text; }
+body.modal-open{ overflow:hidden; }
+
+/* ============================= */
+/*          RESPONSIVE           */
+/* ============================= */
+@media (max-width: 1280px){
+  :root{ --deck-w: clamp(300px, 36vw, 420px); }
+}
+@media (max-width: 980px){
+  .layout{ grid-template-columns:1fr; grid-template-rows:55% 45%; height:100svh; }
+  .resizer{ display:none; }
+  .planner{ display:flex; flex-direction:column; min-height:0; overflow:auto; }
+  .grid{ min-width:900px; overflow:auto; } /* horizontal scroll si trop étroit */
+  :root{ --tile: 140px; }
+}
+@media (max-width: 640px){
+  :root{ --tile: 130px; }
+  .search{ padding:12px 10px; }
+  .deck-head{ gap:8px; }
+  .grid-head,.cell{ padding:8px; }
+  .grid{ min-width:760px; }
+  .cell{ min-height: clamp(72px, 11dvh, 120px); } /* un peu plus compact sur mobile étroit */
+}
+@media (max-height: 900px){
+  .layout{ gap:14px; padding:14px; }
+  .deck, .planner{ padding:12px; border-radius:14px; }
+}
+@media (max-height: 800px){
+  .layout{ gap:12px; padding:12px; }
+  .deck, .planner{ padding:10px; border-radius:12px; }
+}
+@media (max-height: 700px){
+  .layout{ gap:10px; padding:10px; }
+  .deck, .planner{ padding:9px; border-radius:10px; }
+}
+@media (max-height: 620px){
+  .cell{ min-height: clamp(70px, 10dvh, 110px); }
+}
+@media (max-height: 560px){
+  .layout{ gap:8px; padding:8px; }
+  .deck, .planner{ padding:8px; }
+}
